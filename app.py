@@ -47,14 +47,21 @@ if uploaded_file:
                 columns={"kWh_suvartota_display": "kWh_suvartota"}
             ))
 
-            # Prepare CSV (numeric values, semicolon delimiter)
-            csv = summary[["Obj. Nr.", "kWh_suvartota"]].to_csv(index=False, sep=";", encoding="utf-8")
+            
+            # Prepare CSV with comma decimals and semicolon delimiter
+            summary_for_csv = summary.copy()
+            summary_for_csv["kWh_suvartota"] = summary_for_csv["kWh_suvartota"].apply(
+                lambda x: f"{x:,.2f}".replace(",", "X").replace(".", ",").replace("X", " ")
+            )
+            
+            csv = summary_for_csv.to_csv(index=False, sep=";", encoding="utf-8")
             st.download_button(
                 label="Download Full CSV",
                 data=csv,
                 file_name="obj_nr_kWh_consumption_all_rows.csv",
                 mime="text/csv"
             )
+
 
             # Plot top 10 objects
             st.subheader("Top 10 Objects by kWh Consumption")
@@ -69,3 +76,4 @@ if uploaded_file:
 
     except Exception as e:
         st.error(f"Error: {e}")
+
