@@ -13,7 +13,7 @@ Skaičiai CSV faile naudos lietuvišką formatą: tarpas tukstančiams ir kablel
 """)
 
 # File upload
-uploaded_file = st.file_uploader("Upload Excel file", type=["xlsx"])
+uploaded_file = st.file_uploader("Įkelti Excel failą", type=["xlsx"])
 
 if uploaded_file:
     try:
@@ -67,5 +67,6 @@ if uploaded_file:
 
     except Exception as e:
         st.error(f"Error: {e}")
+
 
 
