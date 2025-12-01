@@ -1,3 +1,4 @@
+
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -8,6 +9,7 @@ st.title("KWh Consumption Calculator")
 st.write("""
 Upload an Excel file with a sheet named **'duomenys_analizei'**.
 The app will sum the **Skirtumas** column per **Obj. Nr.**, show results, and let you download a CSV.
+Numbers are formatted with comma as decimal separator and space as thousands separator.
 """)
 
 # File upload
@@ -34,12 +36,19 @@ if uploaded_file:
             # Sort by consumption descending
             summary = summary.sort_values(by="kWh_suvartota", ascending=False)
 
-            # Show top 10 objects
-            st.subheader("Top 10 Objects by kWh Consumption")
-            st.dataframe(summary.head(10))
+            # Format numbers for display (space for thousands, comma for decimals)
+            summary["kWh_suvartota_display"] = summary["kWh_suvartota"].apply(
+                lambda x: f"{x:,.2f}".replace(",", "X").replace(".", ",").replace("X", " ")
+            )
 
-            # Download CSV with semicolon delimiter for Excel compatibility
-            csv = summary.to_csv(index=False, sep=";", encoding="utf-8")
+            # Show table with formatted numbers
+            st.subheader("Results")
+            st.dataframe(summary[["Obj. Nr.", "kWh_suvartota_display"]].rename(
+                columns={"kWh_suvartota_display": "kWh_suvartota"}
+            ))
+
+            # Prepare CSV (numeric values, semicolon delimiter)
+            csv = summary[["Obj. Nr.", "kWh_suvartota"]].to_csv(index=False, sep=";", encoding="utf-8")
             st.download_button(
                 label="Download Full CSV",
                 data=csv,
@@ -48,6 +57,7 @@ if uploaded_file:
             )
 
             # Plot top 10 objects
+            st.subheader("Top 10 Objects by kWh Consumption")
             top10 = summary.head(10)
             fig, ax = plt.subplots(figsize=(10, 6))
             ax.bar(top10["Obj. Nr."], top10["kWh_suvartota"], color="steelblue")
