@@ -55,15 +55,16 @@ if uploaded_file:
             )
 
             # Plot top 10 objects
-            st.subheader("Top 10 Objects by kWh Consumption")
-            top10 = summary.head(10)
-            fig, ax = plt.subplots(figsize=(10, 6))
-            ax.bar(top10["Obj. Nr."], top10["kWh_suvartota"], color="steelblue")
-            ax.set_title("Top 10 Objects by kWh Consumption")
-            ax.set_xlabel("Obj. Nr.")
-            ax.set_ylabel("kWh")
-            plt.xticks(rotation=45)
-            st.pyplot(fig)
+            #st.subheader("Top 10 Objects by kWh Consumption")
+            #top10 = summary.head(10)
+            #fig, ax = plt.subplots(figsize=(10, 6))
+            #ax.bar(top10["Obj. Nr."], top10["kWh_suvartota"], color="steelblue")
+            #ax.set_title("Top 10 Objects by kWh Consumption")
+            #ax.set_xlabel("Obj. Nr.")
+            #ax.set_ylabel("kWh")
+            #plt.xticks(rotation=45)
+            #st.pyplot(fig)
 
     except Exception as e:
         st.error(f"Error: {e}")
+
