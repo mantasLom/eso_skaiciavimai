@@ -4,12 +4,12 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # App title
-st.title("KWh Consumption Calculator")
+st.title("ESO sąnaudų skaičiuoklė")
 
 st.write("""
-Upload an Excel file with a sheet named **'duomenys_analizei'**.
-The app will sum the **Skirtumas** column per **Obj. Nr.**, show results, and let you download a CSV.
-Numbers in the CSV will use Lithuanian format: space for thousands and comma for decimals.
+Įkelkite Excel failą su puslapiu pavadintu **'duomenys_analizei'**.
+Programa susumuos stulpelį **Skirtumas** kiekvienam **Obj. Nr.**, parodys rezultatus ir leis parsisiųsti CSV failą.
+Skaičiai CSV faile naudos lietuvišką formatą: tarpas tukstančiams ir kablelis skaičiams po kablelio.
 """)
 
 # File upload
@@ -67,4 +67,5 @@ if uploaded_file:
 
     except Exception as e:
         st.error(f"Error: {e}")
+
 
