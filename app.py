@@ -9,7 +9,7 @@ st.title("KWh Consumption Calculator")
 st.write("""
 Upload an Excel file with a sheet named **'duomenys_analizei'**.
 The app will sum the **Skirtumas** column per **Obj. Nr.**, show results, and let you download a CSV.
-Numbers are formatted with comma as decimal separator and space as thousands separator.
+Numbers in the CSV will use Lithuanian format: space for thousands and comma for decimals.
 """)
 
 # File upload
@@ -36,24 +36,16 @@ if uploaded_file:
             # Sort by consumption descending
             summary = summary.sort_values(by="kWh_suvartota", ascending=False)
 
-            # Format numbers for display (space for thousands, comma for decimals)
-            summary["kWh_suvartota_display"] = summary["kWh_suvartota"].apply(
-                lambda x: f"{x:,.2f}".replace(",", "X").replace(".", ",").replace("X", " ")
-            )
+            # Show table (raw numbers for clarity)
+            st.subheader("Results (Top 10)")
+            st.dataframe(summary.head(10))
 
-            # Show table with formatted numbers
-            st.subheader("Results")
-            st.dataframe(summary[["Obj. Nr.", "kWh_suvartota_display"]].rename(
-                columns={"kWh_suvartota_display": "kWh_suvartota"}
-            ))
-
-            
-            # Prepare CSV with comma decimals and semicolon delimiter
+            # Prepare CSV with Lithuanian number format
             summary_for_csv = summary.copy()
             summary_for_csv["kWh_suvartota"] = summary_for_csv["kWh_suvartota"].apply(
                 lambda x: f"{x:,.2f}".replace(",", "X").replace(".", ",").replace("X", " ")
             )
-            
+
             csv = summary_for_csv.to_csv(index=False, sep=";", encoding="utf-8")
             st.download_button(
                 label="Download Full CSV",
@@ -61,7 +53,6 @@ if uploaded_file:
                 file_name="obj_nr_kWh_consumption_all_rows.csv",
                 mime="text/csv"
             )
-
 
             # Plot top 10 objects
             st.subheader("Top 10 Objects by kWh Consumption")
@@ -76,4 +67,3 @@ if uploaded_file:
 
     except Exception as e:
         st.error(f"Error: {e}")
-
